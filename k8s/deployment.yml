@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: todo-app-deployment
+  annotations:
+    # These annotations are for the Argo CD Image Updater
+    argocd-image-updater.argoproj.io/image-list: todo-image=ghcr.io/YOUR_GITHUB_USERNAME/Todo-List-nodejs
+    argocd-image-updater.argoproj.io/todo-image.update-strategy: latest
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: todo
+  template:
+    metadata:
+      labels:
+        app: todo
+    spec:
+      containers:
+        - name: todo-app
+          image: ghcr.io/BasilMohamed03/Todo-List-nodejs:latest # ArgoCD will update this tag
+          ports:
+            - containerPort: 8000
+          env:
+            - name: MONGO_URI
+              valueFrom:
+                secretKeyRef:
+                  name: mongodb-secret
+                  key: MONGO_URI
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 8000
+            initialDelaySeconds: 15
+            periodSeconds: 20
