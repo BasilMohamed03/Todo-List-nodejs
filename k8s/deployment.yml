@@ -18,7 +18,8 @@ spec:
     spec:
       containers:
         - name: todo-app
-          image: ghcr.io/BasilMohamed03/Todo-List-nodejs:latest # ArgoCD will update this tag
+          image: ghcr.io/basilmohammed03/todo-list-nodejs:latest
+
           ports:
             - containerPort: 8000
           env:

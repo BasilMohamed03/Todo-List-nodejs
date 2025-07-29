@@ -22,11 +22,14 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GH_PAT }}
 
+      # --- ADD THIS NEW STEP ---
+      - name: Set repo name to lowercase
+        run: echo "IMAGE_REPO=$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
+
+      # --- MODIFY THE 'tags:' LINE IN THE STEP BELOW ---
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
           context: .
           push: true
-          tags: ghcr.io/${{ github.repository }}:${{ github.sha }}
-          # github.repository is in format "owner/repo", which is what GHCR needs.
-          # github.sha is the unique commit ID, perfect for image tags.
+          tags: ghcr.io/${{ env.IMAGE_REPO }}:${{ github.sha }}
