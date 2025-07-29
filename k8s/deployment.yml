@@ -16,6 +16,8 @@ spec:
       labels:
         app: todo
     spec:
+      imagePullSecrets:
+      - name: ghcr-creds
       containers:
         - name: todo-app
           image: ghcr.io/basilmohammed03/todo-list-nodejs:latest
