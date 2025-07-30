@@ -33,3 +33,13 @@ jobs:
           tags: |
             ghcr.io/${{ env.IMAGE_REPO }}:${{ github.sha }}
             ghcr.io/${{ env.IMAGE_REPO }}:latest
+
+      - name: Update deployment timestamp
+        run: |
+          git config --global user.name 'GitHub Actions'
+          git config --global user.email 'actions@github.com'
+          # Use sed to find the 'last-updated' line and replace it with the current timestamp
+          sed -i "s/last-updated: \"\"/last-updated: \"$(date +%s)\"/" k8s/deployment.yml
+          git add k8s/deployment.yml
+          git commit -m "ci: Update deployment timestamp to trigger rollout"
+          git push

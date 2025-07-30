@@ -3,9 +3,7 @@ kind: Deployment
 metadata:
   name: todo-app-deployment
   annotations:
-    argocd-image-updater.argoproj.io/image-list: ghcr.io/basilmohamed03/todo-list-nodejs
-    argocd-image-updater.argoproj.io/write-back-method: git
-    argocd-image-updater.argoproj.io/ghcr.io_basilmohamed03_todo-list-nodejs.update-strategy: latest
+    last-updated: ""
 spec:
   replicas: 1
   selector:
