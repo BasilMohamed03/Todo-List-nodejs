@@ -2,10 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: todo-app-deployment
-  annotations:
-    # These annotations are for the Argo CD Image Updater
-    argocd-image-updater.argoproj.io/image-list: todo-image=ghcr.io/basilmohamed03/todo-list-nodejs
-    argocd-image-updater.argoproj.io/todo-image.update-strategy: latest
 spec:
   replicas: 1
   selector:
