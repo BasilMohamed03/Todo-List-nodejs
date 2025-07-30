@@ -2,6 +2,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: todo-app-deployment
+  annotations:
+    last-updated: ""
 spec:
   replicas: 1
   selector:
