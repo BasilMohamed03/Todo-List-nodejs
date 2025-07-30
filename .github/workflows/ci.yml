@@ -39,7 +39,8 @@ jobs:
         run: |
           git config --global user.name 'GitHub Actions'
           git config --global user.email 'actions@github.com'
-          sed -i "s/last-updated: \"\"/last-updated: \"$(date +%s)\"/" k8s/deployment.yml
+          # This sed command now finds the DEPLOY_TIMESTAMP line and updates its value
+          sed -i "s/value: \"\"/value: \"$(date +%s)\"/" k8s/deployment.yml
           git add k8s/deployment.yml
           git commit -m "ci: Update deployment timestamp to trigger rollout"
           git push

@@ -2,8 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: todo-app-deployment
-  annotations:
-    last-updated: ""
 spec:
   replicas: 1
   selector:
@@ -28,6 +26,8 @@ spec:
                 secretKeyRef:
                   name: mongodb-secret
                   key: MONGO_URI
+            - name: DEPLOY_TIMESTAMP
+              value: ""
           readinessProbe:
             httpGet:
               path: /
