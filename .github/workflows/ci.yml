@@ -2,7 +2,7 @@ name: CI - Build and Push Docker Image
 
 on:
   push:
-    branches: [ "main" ] # Triggers on push to the main branch
+    branches: [ "master" ] 
 
 jobs:
   build-and-push:
@@ -22,11 +22,9 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GH_PAT }}
 
-      # --- ADD THIS NEW STEP ---
       - name: Set repo name to lowercase
         run: echo "IMAGE_REPO=$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
 
-      # --- MODIFY THE 'tags:' LINE IN THE STEP BELOW ---
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
