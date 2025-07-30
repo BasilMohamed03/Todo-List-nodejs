@@ -1,109 +1,171 @@
+DevOps Internship Assessment: CI/CD with Kubernetes and ArgoCD
+This repository contains the complete solution for the DevOps Internship Assessment, including the bonus part. It demonstrates a full CI/CD pipeline for a Node.js To-Do List application, deploying it to a Kubernetes cluster using GitOps principles with ArgoCD.
 
-## Documentation
+Table of Contents
+Project Overview
 
-[Documentation](https://linktodocumentation)
+Architecture
 
-📝 To-Do List nodeJs
+Assumptions and Key Decisions
 
-The to-do list application is a web-based application that allows users to create and manage a list of tasks. The user interface consists of a form to add new tasks, a list of all tasks, and controls to mark tasks as complete or delete them.
+Choice of Environment: Local VM over AWS Cloud
 
-To create the application, Node.js is used to set up the server and handle the logic of the application. Express.js is used to create the routes for the application, allowing the user to interact with the application through a web browser. EJS is used to create the views for the application, allowing the user to see the list of tasks and the form to add new tasks. CSS is used to style the application, making it visually appealing and easy to use.
+Part 1: CI Pipeline with GitHub Actions
 
-MongoDB and Mongoose are used to store the tasks in a database, allowing the user to add, delete, and update tasks as needed. Nodemon is used to monitor changes to the code and automatically restart the server, making it easy to develop and test the application.
+Part 2: VM Configuration with Ansible
 
-When the user adds a new task using the form, Node.js and Express.js handle the request and store the task in the database using Mongoose. When the user views the list of tasks, EJS displays the tasks from the database in a list on the web page. When the user marks a task as complete or deletes a task, Node.js and Express.js handle the request and update the database using Mongoose.
+Part 3 & 4 (Bonus): Kubernetes & ArgoCD Deployment
 
-Overall, the todo list application using Node.js, Express.js, EJS, CSS, JavaScript, MongoDB, Mongoose, and Nodemon can be a great way to create a functional and interactive web application that allows users to manage their tasks online. With the right combination of technologies, it is possible to create an application that is both functional and aesthetically pleasing, making it easy for users to manage their tasks in a convenient and efficient way.
+Accessing the Application
 
-Technologies Used: NodeJS, ExpressJS, EJS, CSS, JavaScript, Nodemon, MongoDB, Mongoose.
-## Demo
+Troubleshooting Journey
 
-Under process...
-## Authors
+1. Project Overview
+This project automates the deployment of a Node.js To-Do List application. The key objectives achieved are:
 
-- [@AnkitVishwakarma](https://github.com/Ankit6098)
+Continuous Integration (CI): Automatically build a Docker image of the application on every push to the master branch and push it to a private container registry (GHCR).
 
+Configuration Management: Use Ansible to automatically provision a virtual machine with all necessary dependencies like Docker and Kubernetes.
 
-## Features
+Continuous Deployment (CD): Use ArgoCD to monitor the container registry for new images and automatically deploy the latest version to a Kubernetes cluster, following GitOps best practices.
 
-- Create, Update, and Delete Tasks: Enable users to create new tasks, update existing tasks (e.g., mark as completed, edit task details), and delete tasks they no longer need.
-- Task Categories provides Implement the ability for users to categorize their tasks into different categories (e.g., work, personal, shopping) or assign labels/tags to tasks for better organization and filtering.
-- MongoDb to store your the user data
-## Run Locally
+Technologies Used
+Application: Node.js, MongoDB
 
-Clone the project
+Containerization: Docker
 
-```bash
-  git clone https://github.com/Ankit6098/Todos-nodejs
-```
+CI/CD: GitHub Actions, ArgoCD
 
-Go to the project directory and open index.html file
+Configuration Management: Ansible
 
-```bash
-  cd Todos-nodejs
-```
+Orchestration: Kubernetes (K3s)
 
-Install the packages
+Virtualization: VMware Workstation
 
-```bash
-  npm install / npm i
-```
+2. Architecture
+The workflow follows a modern GitOps pipeline:
 
-Start the Server
+Developer Push: A developer pushes a code change to the master branch on GitHub.
 
-```bash
-    npm start / nodemon start
-```
-## Acknowledgements
+CI Pipeline Trigger: The push automatically triggers the GitHub Actions workflow.
 
- - [nodemon](https://nodemon.io/)
- - [mongoDb](https://www.mongodb.com/)
- - [mongoose](https://mongoosejs.com/)
+Build & Push: The workflow builds a new Docker image and pushes it to the GitHub Container Registry (GHCR) with two tags: the unique commit SHA and latest.
 
+ArgoCD Image Updater: The ArgoCD Image Updater, running in the cluster, detects the new image in GHCR.
 
-## Screenshots
+Git Commit: The Image Updater automatically commits a change to the deployment.yml file in the Git repository, updating the image tag to the new version.
 
-![225232515-4c100b6b-52e4-40f8-a6d4-85e30dc2f5e7](https://github.com/Ankit6098/Todos-nodejs/assets/92246613/487f548f-7ca6-4183-9443-c88c9f79c3f0)
-![225232960-da554f1f-ba4a-41f8-9856-edaebe339d76](https://github.com/Ankit6098/Todos-nodejs/assets/92246613/25515d2e-1d72-498d-8044-59a01c6b9127)
-![225238829-05433362-5b16-454c-92d5-5e536fe6912e](https://github.com/Ankit6098/Todos-nodejs/assets/92246613/316d15ca-1fe8-4581-80b1-fc316340bba6)
-![225239140-226f8eae-d8b8-4055-8a68-d85d523c2422](https://github.com/Ankit6098/Todos-nodejs/assets/92246613/44a0c418-449e-446f-8a8e-3c4e14fca8bf)
-![225239221-caf86f3d-ef17-4d18-80a6-c72123ff5444](https://github.com/Ankit6098/Todos-nodejs/assets/92246613/2ee90ab0-95d4-44f4-80ac-b17b088ac1ce)
-![225239406-98b7ba7d-df97-4d27-bb66-596a32187d87](https://github.com/Ankit6098/Todos-nodejs/assets/92246613/960ff353-1ce9-4ef8-94e4-10af09184fd2)
-![225239841-4b5d77f0-4a54-4339-b6b3-b6a1be6776b5](https://github.com/Ankit6098/Todos-nodejs/assets/92246613/f5ffc3b8-480f-4d11-9a0b-c469e3c17e8e)
+ArgoCD Sync: ArgoCD detects that the live state in the cluster no longer matches the desired state in the Git repository.
 
+Deployment: ArgoCD automatically syncs the application, pulling the new image and rolling out the update to the Kubernetes cluster.
 
-## Related
+3. Assumptions and Key Decisions
+Choice of Environment: Local VM over AWS Cloud
+The initial plan was to use an AWS EC2 t2.micro instance from the free tier. However, this approach was abandoned due to severe performance limitations.
 
-Here are some other projects
+Justification: The t2.micro instance, with its limited 1 vCPU and 1 GiB of RAM, proved insufficient to run a Kubernetes cluster (even the lightweight K3s) and the ArgoCD application simultaneously. The instance repeatedly became unresponsive, leading to installation timeouts and connection failures.
 
-[Alarm CLock - javascript](https://github.com/Ankit6098/Todos-nodejs)\
-[IMDb Clone - javascript](https://github.com/Ankit6098/IMDb-Clone)
+To successfully complete the bonus part of the assessment, a more powerful and stable environment was necessary. As per the guidelines allowing the use of a local machine, the project was pivoted to a local CentOS 9 VM running on VMware. This provided the required resources (2+ vCPUs, 2GB+ RAM) to run the full Kubernetes and ArgoCD stack reliably, allowing for the successful demonstration of all required DevOps skills without being hindered by hardware constraints.
 
+4. Part 1: CI Pipeline with GitHub Actions
+This section covers the containerization of the application and the setup of the CI workflow.
 
-## 🚀 About Me
-I'm a full stack developer...
+1. Fork and Clone
+The repository Ankit6098/Todo-List-nodejs was forked and cloned locally.
 
+2. MongoDB Setup
+A free M0 cluster was created on MongoDB Atlas to serve as the application's database.
 
-# Hi, I'm Ankit! 👋
+3. Dockerization
+A multi-stage Dockerfile was created to build a small, efficient production image.
 
-I'm a full stack developer 😎 ... Love to Develop Classic Unique fascinating and Eye Catching UI and Love to Create Projects and Building logics.
-## 🔗 Links
-[![portfolio](https://img.shields.io/badge/my_portfolio-000?style=for-the-badge&logo=ko-fi&logoColor=white)](https://ankithub.me/Resume/)
+4. GitHub Actions Workflow
+A CI workflow was created at .github/workflows/ci.yml.
 
-[![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColorwhite=)](https://www.linkedin.com/in/ankit-vishwakarma-6531221b0/)
+Trigger: The workflow runs on every push to the master branch.
 
+Lowercase Tags: A step was added to convert the repository name to lowercase, as required by container registries.
 
-## Other Common Github Profile Sections
-🧠 I'm currently learning FullStack Developer Course from Coding Ninjas
+Build and Push: The workflow builds the Docker image and pushes it to GHCR with both a unique commit SHA tag and a latest tag.
 
-📫 How to reach me ankitvis609@gmail.com
+5. Required Secrets
+The following secrets must be configured in the GitHub repository at Settings > Secrets and variables > Actions:
 
+GH_PAT: A GitHub Personal Access Token with write:packages scope to allow pushing images to GHCR.
 
-## 🛠 Skills
-React, Java, Javascript, HTML, CSS, Nodejs, ExpressJs, Mongodb, Mongoose...
+5. Part 2: VM Configuration with Ansible
+Ansible was used to automate the setup of a local CentOS 9 VM.
 
+1. VM Creation
+A local VM was created using VMware with the following specifications:
 
-## Feedback
+OS: CentOS 9 Stream
 
-If you have any feedback, please reach out to us at ankitvis609@gmail.com
+CPU: 2 Cores
 
+RAM: 2 GB
+
+Network: NAT
+
+2. Ansible Playbook
+An Ansible playbook (ansible_config/playbook.yml) was created to perform the following tasks:
+
+Install necessary dependencies (git).
+
+Install Docker and configure it to run as a service.
+
+Add the user to the docker group.
+
+Install a lightweight Kubernetes distribution (K3s) and its required SELinux policy.
+
+6. Part 3 & 4 (Bonus): Kubernetes & ArgoCD Deployment
+The bonus part was completed by deploying the application to a K3s cluster using ArgoCD.
+
+1. Kubernetes Manifests
+A k8s directory was created to hold the Kubernetes configuration files:
+
+secret.yml: Manages the MongoDB connection string as a Kubernetes secret.
+
+deployment.yml: Defines how to run the application, including health checks, resource requests, and the imagePullSecrets needed to pull from a private registry.
+
+service.yml: Exposes the application to the network using a NodePort.
+
+2. ArgoCD Installation
+The full, standard version of ArgoCD was installed on the K3s cluster.
+
+The ArgoCD Image Updater was also installed to enable the automated deployment workflow.
+
+3. ArgoCD Configuration
+A Kubernetes secret (image-updater-secret) was created containing a GitHub PAT with repo scope. This allows the image updater to commit changes back to the Git repository.
+
+The ArgoCD UI was exposed via a NodePort for easy access.
+
+4. Application Deployment
+A new application was created in the ArgoCD UI, pointing to this Git repository.
+
+ArgoCD automatically synced the manifests and deployed the application.
+
+7. Accessing the Application
+To access the deployed To-Do List application:
+
+Find the application's port by running this command on the VM:
+
+sudo k3s kubectl get svc todo-app-service -n default
+
+Look for the NodePort number (e.g., 80:3xxxx/TCP).
+
+Open your browser and navigate to:
+http://<YOUR_VM_IP>:<NODE_PORT>
+
+8. Troubleshooting Journey
+Several challenges were encountered and overcome during this assessment, demonstrating key debugging skills:
+
+Cloud vs. Local: The initial choice of an AWS t2.micro instance was abandoned due to resource exhaustion, leading to a successful pivot to a more powerful local VM.
+
+Ansible Connectivity: Initial connection issues were resolved by correcting the remote username (centos2), fixing the playbook to handle package conflicts (podman-docker), and ensuring the correct installation method for K3s on CentOS 9.
+
+Image Naming: The CI pipeline was failing due to uppercase letters in the GitHub username. This was fixed by adding a step to lowercase the repository name before tagging the image.
+
+Image Not Found: The ImagePullBackOff error was traced back to a CI pipeline that was not successfully pushing the image. The root cause was identified as incorrect repository permissions (Read only instead of Read and write) for GitHub Actions.
+
+Application Health Checks: The final connection refused error was debugged by checking the application logs, which revealed the app was running on port 4000 while the Kubernetes probes were checking port 8000. Aligning the ports in the manifests resolved the issue.
