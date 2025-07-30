@@ -25,6 +25,9 @@ jobs:
       - name: Set repo name to lowercase
         run: echo "IMAGE_REPO=$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
 
+      - name: List files in the repository
+        run: ls -laR
+
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
