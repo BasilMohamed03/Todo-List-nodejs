@@ -10,4 +10,4 @@ FROM node:18-alpine
 WORKDIR /app
 COPY --from=builder /app ./
 EXPOSE 8000
-CMD ["npm", "start"]
+CMD ["node", "index.js"]
