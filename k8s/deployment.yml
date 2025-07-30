@@ -23,7 +23,7 @@ spec:
           image: ghcr.io/basilmohamed03/todo-list-nodejs:latest
 
           ports:
-            - containerPort: 8000
+            - containerPort: 4000
           env:
             - name: MONGO_URI
               valueFrom:
@@ -33,12 +33,12 @@ spec:
           readinessProbe:
             httpGet:
               path: /
-              port: 8000
+              port: 4000
             initialDelaySeconds: 5
             periodSeconds: 10
           livenessProbe:
             httpGet:
               path: /
-              port: 8000
+              port: 4000
             initialDelaySeconds: 15
             periodSeconds: 20

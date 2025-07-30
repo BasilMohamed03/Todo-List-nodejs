@@ -9,5 +9,5 @@ spec:
   ports:
     - protocol: TCP
       port: 80 # Port inside the cluster
-      targetPort: 8000 # Port on the container
+      targetPort: 4000 # Port on the container
       # NodePort will be assigned automatically from the 30000-32767 range
