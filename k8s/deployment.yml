@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: todo-app-deployment
   annotations:
-    last-updated: ""
+    last-updated: "1753878396"
 spec:
   replicas: 1
   selector:
