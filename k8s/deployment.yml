@@ -1,7 +1,11 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: todo-app-deployment
+    name: todo-app-deployment   
+ #  annotations:
+ #    argocd-image-updater.argoproj.io/image-list: ...
+ #    argocd-image-updater.argoproj.io/write-back-method: git
+ #    argocd-image-updater.argoproj.io/todo-image.update-strategy: digest 
 spec:
   replicas: 1
   selector:
@@ -40,3 +44,4 @@ spec:
               port: 4000
             initialDelaySeconds: 15
             periodSeconds: 20
+
