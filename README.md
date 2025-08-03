@@ -1,24 +1,21 @@
-# DevOps Internship Assessment: CI/CD with Kubernetes and ArgoCD
-This repository contains the complete solution for the DevOps Internship Assessment, including the bonus part. It demonstrates a full CI/CD pipeline for a Node.js To-Do List application, deploying it to a Kubernetes cluster using GitOps principles with ArgoCD.
+# CI/CD with Kubernetes and ArgoCD
+This project demonstrates a full CI/CD pipeline for a Node.js To-Do List application, deploying it to a Kubernetes cluster using GitOps principles with ArgoCD, (This project is part of Fortstak Assessment).
 
-
-# Table of Contents
+## Table of Contents
 1. Project Overview
 2. Architecture
 3. Assumptions and Key Decisions
+4. Building The App:
 
-4. Building The App
-   Part 1: CI Pipeline with GitHub Actions
+   * Part 1: CI Pipeline with GitHub Actions
 
-   Part 2: VM Configuration with Ansible
+   * Part 2: VM Configuration with Ansible
 
-   Part 3 & 4 : Kubernetes & ArgoCD Deployment
-
+   * Part 3 & 4 : Kubernetes & ArgoCD Deployment
 5. Accessing the Application
-
 6. Troubleshooting Journey
 
-# 1. Project Overview
+## 1. Project Overview
 This project automates the deployment of a Node.js To-Do List application. The key objectives achieved are:
 
 Continuous Integration (CI): Automatically build a Docker image of the application on every push to the master branch and push it to a private container registry (GHCR).
@@ -40,7 +37,7 @@ Orchestration: Kubernetes (K3s)
 
 Virtualization: VMware Workstation
 
-# Architecture
+## Architecture
 The workflow follows a modern GitOps pipeline:
 
 Developer Push: A developer pushes a code change to the master branch on GitHub.
@@ -57,7 +54,7 @@ ArgoCD Sync: ArgoCD detects that the live state in the cluster no longer matches
 
 Deployment: ArgoCD automatically syncs the application, pulling the new image and rolling out the update to the Kubernetes cluster.
 
-3. Assumptions and Key Decisions
+## Assumptions and Key Decisions
 Choice of Environment: Local VM over AWS Cloud
 The initial plan was to use an AWS EC2 t2.micro instance from the free tier. However, this approach was abandoned due to severe performance limitations.
 
@@ -65,7 +62,7 @@ Justification: The t2.micro instance, with its limited 1 vCPU and 1 GiB of RAM, 
 
 To successfully complete the bonus part of the assessment, a more powerful and stable environment was necessary. As per the guidelines allowing the use of a local machine, the project was pivoted to a local CentOS 9 VM running on VMware. This provided the required resources (2+ vCPUs, 2GB+ RAM) to run the full Kubernetes and ArgoCD stack reliably, allowing for the successful demonstration of all required DevOps skills without being hindered by hardware constraints.
 
-4. Part 1: CI Pipeline with GitHub Actions
+### Part 1: CI Pipeline with GitHub Actions
 This section covers the containerization of the application and the setup of the CI workflow.
 
 1. Fork and Clone
@@ -91,7 +88,7 @@ The following secrets must be configured in the GitHub repository at Settings > 
 
 GH_PAT: A GitHub Personal Access Token with write:packages scope to allow pushing images to GHCR.
 
-5. Part 2: VM Configuration with Ansible
+### Part 2: VM Configuration with Ansible
 Ansible was used to automate the setup of a local CentOS 9 VM.
 
 1. VM Creation
@@ -116,7 +113,7 @@ Add the user to the docker group.
 
 Install a lightweight Kubernetes distribution (K3s) and its required SELinux policy.
 
-6. Part 3 & 4 (Bonus): Kubernetes & ArgoCD Deployment
+### Part 3 & 4: Kubernetes & ArgoCD Deployment
 The bonus part was completed by deploying the application to a K3s cluster using ArgoCD.
 
 1. Kubernetes Manifests
@@ -143,7 +140,7 @@ A new application was created in the ArgoCD UI, pointing to this Git repository.
 
 ArgoCD automatically synced the manifests and deployed the application.
 
-7. Accessing the Application
+## Accessing the Application
 To access the deployed To-Do List application:
 
 Find the application's port by running this command on the VM:
@@ -155,7 +152,7 @@ Look for the NodePort number (e.g., 80:3xxxx/TCP).
 Open your browser and navigate to:
 http://<YOUR_VM_IP>:<NODE_PORT>
 
-8. Troubleshooting Journey
+## Troubleshooting Journey
 Several challenges were encountered and overcome during this assessment, demonstrating key debugging skills:
 
 Cloud vs. Local: The initial choice of an AWS t2.micro instance was abandoned due to resource exhaustion, leading to a successful pivot to a more powerful local VM.
