@@ -18,41 +18,41 @@ This project demonstrates a full CI/CD pipeline for a Node.js To-Do List applica
 ## 1. Project Overview
 This project automates the deployment of a Node.js To-Do List application. The key objectives achieved are:
 
-Continuous Integration (CI): Automatically build a Docker image of the application on every push to the master branch and push it to a private container registry (GHCR).
+**Continuous Integration (CI):** Automatically build a Docker image of the application on every push to the master branch and push it to a private container registry (GHCR).
 
-Configuration Management: Use Ansible to automatically provision a virtual machine with all necessary dependencies like Docker and Kubernetes.
+**Configuration Management:** Use Ansible to automatically provision a virtual machine with all necessary dependencies like Docker and Kubernetes.
 
-Continuous Deployment (CD): Use ArgoCD to monitor the container registry for new images and automatically deploy the latest version to a Kubernetes cluster, following GitOps best practices.
+**Continuous Deployment (CD):** Use ArgoCD to monitor the container registry for new images and automatically deploy the latest version to a Kubernetes cluster, following GitOps best practices.
 
-Technologies Used
-Application: Node.js, MongoDB
+* Technologies Used
+* **Application:** Node.js, MongoDB
 
-Containerization: Docker
+* **Containerization:** Docker
 
-CI/CD: GitHub Actions, ArgoCD
+* **CI/CD:** GitHub Actions, ArgoCD
 
-Configuration Management: Ansible
+* **Configuration Management:** Ansible
 
-Orchestration: Kubernetes (K3s)
+* **Orchestration:** Kubernetes (K3s)
 
-Virtualization: VMware Workstation
+* **Virtualization:** VMware Workstation
 
 ## Architecture
 The workflow follows a modern GitOps pipeline:
 
-Developer Push: A developer pushes a code change to the master branch on GitHub.
+**Developer Push:** A developer pushes a code change to the master branch on GitHub.
 
-CI Pipeline Trigger: The push automatically triggers the GitHub Actions workflow.
+**CI Pipeline Trigger:** The push automatically triggers the GitHub Actions workflow.
 
-Build & Push: The workflow builds a new Docker image and pushes it to the GitHub Container Registry (GHCR) with two tags: the unique commit SHA and latest.
+**Build & Push:** The workflow builds a new Docker image and pushes it to the GitHub Container Registry (GHCR) with two tags: the unique commit SHA and latest.
 
-ArgoCD Image Updater: The ArgoCD Image Updater, running in the cluster, detects the new image in GHCR.
+**ArgoCD Image Updater:** The ArgoCD Image Updater, running in the cluster, detects the new image in GHCR.
 
-Git Commit: The Image Updater automatically commits a change to the deployment.yml file in the Git repository, updating the image tag to the new version.
+**Git Commit:** The Image Updater automatically commits a change to the deployment.yml file in the Git repository, updating the image tag to the new version.
 
-ArgoCD Sync: ArgoCD detects that the live state in the cluster no longer matches the desired state in the Git repository.
+**ArgoCD Sync:** ArgoCD detects that the live state in the cluster no longer matches the desired state in the Git repository.
 
-Deployment: ArgoCD automatically syncs the application, pulling the new image and rolling out the update to the Kubernetes cluster.
+**Deployment:** ArgoCD automatically syncs the application, pulling the new image and rolling out the update to the Kubernetes cluster.
 
 ## Assumptions and Key Decisions
 Choice of Environment: Local VM over AWS Cloud
@@ -65,53 +65,53 @@ To successfully complete the bonus part of the assessment, a more powerful and s
 ### Part 1: CI Pipeline with GitHub Actions
 This section covers the containerization of the application and the setup of the CI workflow.
 
-1. Fork and Clone
+1. Fork and Clone:
 The repository Ankit6098/Todo-List-nodejs was forked and cloned locally.
 
-2. MongoDB Setup
+2. MongoDB Setup:
 A free M0 cluster was created on MongoDB Atlas to serve as the application's database.
 
-3. Dockerization
+3. Dockerization:
 A multi-stage Dockerfile was created to build a small, efficient production image.
 
-4. GitHub Actions Workflow
+4. GitHub Actions Workflow:
 A CI workflow was created at .github/workflows/ci.yml.
 
-Trigger: The workflow runs on every push to the master branch.
+5. Trigger: The workflow runs on every push to the master branch.
 
-Lowercase Tags: A step was added to convert the repository name to lowercase, as required by container registries.
+6. Lowercase Tags: A step was added to convert the repository name to lowercase, as required by container registries.
 
-Build and Push: The workflow builds the Docker image and pushes it to GHCR with both a unique commit SHA tag and a latest tag.
+7. Build and Push: The workflow builds the Docker image and pushes it to GHCR with both a unique commit SHA tag and a latest tag.
 
-5. Required Secrets
+8. . Required Secrets
 The following secrets must be configured in the GitHub repository at Settings > Secrets and variables > Actions:
 
-GH_PAT: A GitHub Personal Access Token with write:packages scope to allow pushing images to GHCR.
+9. GH_PAT: A GitHub Personal Access Token with write: packages scope to allow pushing images to GHCR.
 
 ### Part 2: VM Configuration with Ansible
 Ansible was used to automate the setup of a local CentOS 9 VM.
 
-1. VM Creation
-A local VM was created using VMware with the following specifications:
+1. **VM Creation**
+* A local VM was created using VMware with the following specifications:
 
-OS: CentOS 9 Stream
+* OS: CentOS 9 Stream*
 
-CPU: 2 Cores
+* CPU: 2 Cores
 
-RAM: 2 GB
+* RAM: 2 GB
 
-Network: NAT
+* Network: NAT
 
 2. Ansible Playbook
-An Ansible playbook (ansible_config/playbook.yml) was created to perform the following tasks:
+* An Ansible playbook (ansible_config/playbook.yml) was created to perform the following tasks:
 
-Install necessary dependencies (git).
+* Install necessary dependencies (git).
 
-Install Docker and configure it to run as a service.
+* Install Docker and configure it to run as a service.
 
-Add the user to the docker group.
+* Add the user to the docker group.
 
-Install a lightweight Kubernetes distribution (K3s) and its required SELinux policy.
+* Install a lightweight Kubernetes distribution (K3s) and its required SELinux policy.
 
 ### Part 3 & 4: Kubernetes & ArgoCD Deployment
 The bonus part was completed by deploying the application to a K3s cluster using ArgoCD.
