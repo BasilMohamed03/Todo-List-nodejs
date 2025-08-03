@@ -112,51 +112,44 @@ Ansible was used to automate the setup of a local CentOS 9 VM.
 ### Part 3 & 4: Kubernetes & ArgoCD Deployment
 Deploying the application to a K3s cluster using ArgoCD.
 
-1. **Kubernetes Manifests**
+1. Kubernetes Manifests
 A k8s directory was created to hold the Kubernetes configuration files:
-
 * **secret.yml:** Manages the MongoDB connection string as a Kubernetes secret.
-
 * **deployment.yml:** Defines how to run the application, including health checks, resource requests, and the imagePullSecrets needed to pull from a private registry.
-
 * **service.yml:** Exposes the application to the network using a NodePort.
 
-2. **ArgoCD Installation**
-* **The full, standard version of ArgoCD was installed on the K3s cluster.**
+2. *ArgoCD Installation
+  * The full, standard version of ArgoCD was installed on the K3s cluster.
+  * The ArgoCD Image Updater was also installed to enable the automated deployment workflow.
+  * ArgoCD Configuration
+  * A Kubernetes secret (image-updater-secret) was created containing a GitHub PAT with repo scope. This allows the image updater to commit changes back to the Git repository.
+  * The ArgoCD UI was exposed via a NodePort for easy access.
 
-* **The ArgoCD Image Updater was also installed to enable the automated deployment workflow.**
+3. Application Deployment
+    * A new application was created in the ArgoCD UI, pointing to this Git repository.
 
-3. **ArgoCD Configuration**
-* **A Kubernetes secret (image-updater-secret) was created containing a GitHub PAT with repo scope. This allows the image updater to commit changes back to the Git repository.**
-
-* **The ArgoCD UI was exposed via a NodePort for easy access.**
-
-4. **Application Deployment**
-* **A new application was created in the ArgoCD UI, pointing to this Git repository.**
-
-* **ArgoCD automatically synced the manifests and deployed the application.**
+    * ArgoCD automatically synced the manifests and deployed the application.
 
 ## Accessing the Application
-To access the deployed To-Do List application:
+* **o access the deployed To-Do List application:**
 
-Find the application's port by running this command on the VM:
+* Find the application's port by running this command on the VM:
 
-sudo k3s kubectl get svc todo-app-service -n default
+* sudo k3s kubectl get svc todo-app-service -n default
 
-Look for the NodePort number (e.g., 80:3xxxx/TCP).
+* Look for the NodePort number (e.g., 80:3xxxx/TCP).
 
-Open your browser and navigate to:
-http://<YOUR_VM_IP>:<NODE_PORT>
+* Open your browser and navigate to: http://<YOUR_VM_IP>:<NODE_PORT>
 
 ## Troubleshooting Journey
-Several challenges were encountered and overcome during this assessment, demonstrating key debugging skills:
+* **Several challenges were encountered and overcome during this assessment, demonstrating key debugging skills:**
 
-Cloud vs. Local: The initial choice of an AWS t2.micro instance was abandoned due to resource exhaustion, leading to a successful pivot to a more powerful local VM.
+* Cloud vs. Local: The initial choice of an AWS t2.micro instance was abandoned due to resource exhaustion, leading to a successful pivot to a more powerful local VM.
 
-Ansible Connectivity: Initial connection issues were resolved by correcting the remote username (centos2), fixing the playbook to handle package conflicts (podman-docker), and ensuring the correct installation method for K3s on CentOS 9.
+* Ansible Connectivity: Initial connection issues were resolved by correcting the remote username (centos2), fixing the playbook to * handle package conflicts (podman-docker), and ensuring the correct installation method for K3s on CentOS 9.
 
-Image Naming: The CI pipeline was failing due to uppercase letters in the GitHub username. This was fixed by adding a step to lowercase the repository name before tagging the image.
+* Image Naming: The CI pipeline was failing due to uppercase letters in the GitHub username. This was fixed by adding a step to lowercase the repository name before tagging the image.
 
-Image Not Found: The ImagePullBackOff error was traced back to a CI pipeline that was not successfully pushing the image. The root cause was identified as incorrect repository permissions (Read only instead of Read and write) for GitHub Actions.
+* Image Not Found: The ImagePullBackOff error was traced back to a CI pipeline that was not successfully pushing the image. The root cause was identified as incorrect repository permissions (Read only instead of Read and write) for GitHub Actions.
 
-Application Health Checks: The final connection refused error was debugged by checking the application logs, which revealed the app was running on port 4000 while the Kubernetes probes were checking port 8000. Aligning the ports in the manifests resolved the issue.
+* Application Health Checks: The final connection refused error was debugged by checking the application logs, which revealed the app was running on port 4000 while the Kubernetes probes were checking port 8000. Aligning the ports in the manifests resolved the issue.
