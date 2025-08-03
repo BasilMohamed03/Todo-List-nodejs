@@ -24,7 +24,7 @@ This project automates the deployment of a Node.js To-Do List application. The k
 
 **Continuous Deployment (CD):** Use ArgoCD to monitor the container registry for new images and automatically deploy the latest version to a Kubernetes cluster, following GitOps best practices.
 
-* Technologies Used
+### Technologies Used
 * **Application:** Node.js, MongoDB
 
 * **Containerization:** Docker
@@ -55,68 +55,64 @@ The workflow follows a modern GitOps pipeline:
 **Deployment:** ArgoCD automatically syncs the application, pulling the new image and rolling out the update to the Kubernetes cluster.
 
 ## Assumptions and Key Decisions
-Choice of Environment: Local VM over AWS Cloud
+**Choice of Environment:** Local VM over AWS Cloud
 The initial plan was to use an AWS EC2 t2.micro instance from the free tier. However, this approach was abandoned due to severe performance limitations.
 
-Justification: The t2.micro instance, with its limited 1 vCPU and 1 GiB of RAM, proved insufficient to run a Kubernetes cluster (even the lightweight K3s) and the ArgoCD application simultaneously. The instance repeatedly became unresponsive, leading to installation timeouts and connection failures.
+**Justification:** The t2.micro instance, with its limited 1 vCPU and 1 GiB of RAM, proved insufficient to run a Kubernetes cluster (even the lightweight K3s) and the ArgoCD application simultaneously. The instance repeatedly became unresponsive, leading to installation timeouts and connection failures.
 
-To successfully complete the bonus part of the assessment, a more powerful and stable environment was necessary. As per the guidelines allowing the use of a local machine, the project was pivoted to a local CentOS 9 VM running on VMware. This provided the required resources (2+ vCPUs, 2GB+ RAM) to run the full Kubernetes and ArgoCD stack reliably, allowing for the successful demonstration of all required DevOps skills without being hindered by hardware constraints.
+To successfully complete the assessment, a more powerful and stable environment was necessary. As per the guidelines allowing the use of a local machine, the project was pivoted to a local CentOS 9 VM running on VMware. This provided the required resources (2+ vCPUs, 2GB+ RAM) to run the full Kubernetes and ArgoCD stack reliably, allowing for the successful demonstration of all required DevOps skills without being hindered by hardware constraints.
 
+## Building The App:
 ### Part 1: CI Pipeline with GitHub Actions
 This section covers the containerization of the application and the setup of the CI workflow.
 
-1. Fork and Clone:
-The repository Ankit6098/Todo-List-nodejs was forked and cloned locally.
+1. **Fork and Clone:** The repository Ankit6098/Todo-List-nodejs was forked and cloned locally.
 
-2. MongoDB Setup:
-A free M0 cluster was created on MongoDB Atlas to serve as the application's database.
+2. **MongoDB Setup:** A free M0 cluster was created on MongoDB Atlas to serve as the application's database.
 
-3. Dockerization:
-A multi-stage Dockerfile was created to build a small, efficient production image.
+3. **Dockerization:** A multi-stage Dockerfile was created to build a small, efficient production image.
 
-4. GitHub Actions Workflow:
-A CI workflow was created at .github/workflows/ci.yml.
+4. **GitHub Actions Workflow:** A CI workflow was created at .github/workflows/ci.yml.
 
-5. Trigger: The workflow runs on every push to the master branch.
+5. **Trigger:** The workflow runs on every push to the master branch.
 
-6. Lowercase Tags: A step was added to convert the repository name to lowercase, as required by container registries.
+6. **Lowercase Tags:** A step was added to convert the repository name to lowercase, as required by container registries.
 
-7. Build and Push: The workflow builds the Docker image and pushes it to GHCR with both a unique commit SHA tag and a latest tag.
+7. **Build and Push:** The workflow builds the Docker image and pushes it to GHCR with both a unique commit SHA tag and a latest tag.
 
-8. . Required Secrets
-The following secrets must be configured in the GitHub repository at Settings > Secrets and variables > Actions:
+8. **Required Secrets** The following secrets must be configured in the GitHub repository at Settings > Secrets and variables > Actions.
 
-9. GH_PAT: A GitHub Personal Access Token with write: packages scope to allow pushing images to GHCR.
+9. **GH_PAT:** A GitHub Personal Access Token with `write:` Packages scope to allow pushing images to GHCR.
 
 ### Part 2: VM Configuration with Ansible
 Ansible was used to automate the setup of a local CentOS 9 VM.
 
 1. **VM Creation**
-* A local VM was created using VMware with the following specifications:
+ A local VM was created using VMware with the following specifications:
 
-* OS: CentOS 9 Stream*
+   **OS:** CentOS 9 Stream*
 
-* CPU: 2 Cores
+   **CPU:** 2 Cores
 
-* RAM: 2 GB
+   **RAM:** 2 GB
 
-* Network: NAT
+   **Network:** NAT
 
-2. Ansible Playbook
-* An Ansible playbook (ansible_config/playbook.yml) was created to perform the following tasks:
+2. **Ansible Playbook**
+  * An Ansible playbook (ansible_config/playbook.yml) was created to perform the following tasks:
 
-* Install necessary dependencies (git).
+  * Install necessary dependencies (git).
 
-* Install Docker and configure it to run as a service.
+  * Install Docker and configure it to run as a service.
 
-* Add the user to the docker group.
+  * Add the user to the docker group.
 
-* Install a lightweight Kubernetes distribution (K3s) and its required SELinux policy.
+  * Install a lightweight Kubernetes distribution (K3s) and its required SELinux policy.
 
 ### Part 3 & 4: Kubernetes & ArgoCD Deployment
-The bonus part was completed by deploying the application to a K3s cluster using ArgoCD.
+Deploying the application to a K3s cluster using ArgoCD.
 
-1. Kubernetes Manifests
+1. #### Kubernetes Manifests
 A k8s directory was created to hold the Kubernetes configuration files:
 
 secret.yml: Manages the MongoDB connection string as a Kubernetes secret.
@@ -125,17 +121,17 @@ deployment.yml: Defines how to run the application, including health checks, res
 
 service.yml: Exposes the application to the network using a NodePort.
 
-2. ArgoCD Installation
+2. #### ArgoCD Installation
 The full, standard version of ArgoCD was installed on the K3s cluster.
 
 The ArgoCD Image Updater was also installed to enable the automated deployment workflow.
 
-3. ArgoCD Configuration
+3. #### ArgoCD Configuration
 A Kubernetes secret (image-updater-secret) was created containing a GitHub PAT with repo scope. This allows the image updater to commit changes back to the Git repository.
 
 The ArgoCD UI was exposed via a NodePort for easy access.
 
-4. Application Deployment
+4. #### Application Deployment
 A new application was created in the ArgoCD UI, pointing to this Git repository.
 
 ArgoCD automatically synced the manifests and deployed the application.
