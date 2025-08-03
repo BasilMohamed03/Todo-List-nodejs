@@ -1,26 +1,24 @@
-DevOps Internship Assessment: CI/CD with Kubernetes and ArgoCD
+# DevOps Internship Assessment: CI/CD with Kubernetes and ArgoCD
 This repository contains the complete solution for the DevOps Internship Assessment, including the bonus part. It demonstrates a full CI/CD pipeline for a Node.js To-Do List application, deploying it to a Kubernetes cluster using GitOps principles with ArgoCD.
 
-Table of Contents
-Project Overview
 
-Architecture
-
-Assumptions and Key Decisions
-
-Choice of Environment: Local VM over AWS Cloud
-
-Part 1: CI Pipeline with GitHub Actions
-
-Part 2: VM Configuration with Ansible
-
-Part 3 & 4 (Bonus): Kubernetes & ArgoCD Deployment
-
-Accessing the Application
-
-Troubleshooting Journey
-
+# Table of Contents
 1. Project Overview
+2. Architecture
+3. Assumptions and Key Decisions
+
+4. Building The App
+   Part 1: CI Pipeline with GitHub Actions
+
+   Part 2: VM Configuration with Ansible
+
+   Part 3 & 4 : Kubernetes & ArgoCD Deployment
+
+5. Accessing the Application
+
+6. Troubleshooting Journey
+
+# 1. Project Overview
 This project automates the deployment of a Node.js To-Do List application. The key objectives achieved are:
 
 Continuous Integration (CI): Automatically build a Docker image of the application on every push to the master branch and push it to a private container registry (GHCR).
@@ -42,7 +40,7 @@ Orchestration: Kubernetes (K3s)
 
 Virtualization: VMware Workstation
 
-2. Architecture
+# Architecture
 The workflow follows a modern GitOps pipeline:
 
 Developer Push: A developer pushes a code change to the master branch on GitHub.
