@@ -7,11 +7,11 @@ This project demonstrates a full CI/CD pipeline for a Node.js To-Do List applica
 3. Assumptions and Key Decisions
 4. Building The App:
 
-   * Part 1: CI Pipeline with GitHub Actions
+   * **Part 1:** CI Pipeline with GitHub Actions
 
-   * Part 2: VM Configuration with Ansible
+   * **Part 2:** VM Configuration with Ansible
 
-   * Part 3 & 4 : Kubernetes & ArgoCD Deployment
+   * **Part 3 & 4:** Kubernetes & ArgoCD Deployment
 5. Accessing the Application
 6. Troubleshooting Journey
 
@@ -113,22 +113,22 @@ Ansible was used to automate the setup of a local CentOS 9 VM.
 Deploying the application to a K3s cluster using ArgoCD.
 
 1. Kubernetes Manifests
-A k8s directory was created to hold the Kubernetes configuration files:
-* **secret.yml:** Manages the MongoDB connection string as a Kubernetes secret.
-* **deployment.yml:** Defines how to run the application, including health checks, resource requests, and the imagePullSecrets needed to pull from a private registry.
-* **service.yml:** Exposes the application to the network using a NodePort.
+  A k8s directory was created to hold the Kubernetes configuration files:
+      * **secret.yml:** Manages the MongoDB connection string as a Kubernetes secret.
+      * **deployment.yml:** Defines how to run the application, including health checks, resource requests, and the imagePullSecrets    needed to pull from a private registry.
+      * **service.yml:** Exposes the application to the network using a NodePort.
 
-2. *ArgoCD Installation
-  * The full, standard version of ArgoCD was installed on the K3s cluster.
-  * The ArgoCD Image Updater was also installed to enable the automated deployment workflow.
-  * ArgoCD Configuration
-  * A Kubernetes secret (image-updater-secret) was created containing a GitHub PAT with repo scope. This allows the image updater to commit changes back to the Git repository.
-  * The ArgoCD UI was exposed via a NodePort for easy access.
+2. ArgoCD Installation
+      * The full, standard version of ArgoCD was installed on the K3s cluster.
+      * The ArgoCD Image Updater was also installed to enable the automated deployment workflow.
+      * ArgoCD Configuration
+      * A Kubernetes secret (image-updater-secret) was created containing a GitHub PAT with repo scope. This allows the image updater to commit changes back to the Git repository.
+      * The ArgoCD UI was exposed via a NodePort for easy access.
 
 3. Application Deployment
-    * A new application was created in the ArgoCD UI, pointing to this Git repository.
+      * A new application was created in the ArgoCD UI, pointing to this Git repository.
 
-    * ArgoCD automatically synced the manifests and deployed the application.
+      * ArgoCD automatically synced the manifests and deployed the application.
 
 ## Accessing the Application
 * **o access the deployed To-Do List application:**
