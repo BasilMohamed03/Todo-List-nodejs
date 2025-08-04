@@ -133,7 +133,7 @@ Deploying the application to a K3s cluster using ArgoCD.
 4. **Application Deployment**
       * A new application was created in the ArgoCD UI, pointing to this Git repository.
 
-      ![Deployment](Screenshots/ArgoCD UI.png)
+      ![Deployment](Screenshots/ArgoCD_UI.png)
       * ArgoCD automatically synced the manifests and deployed the application.
       
       ![Deployment2](Screenshots/Pod.png)
