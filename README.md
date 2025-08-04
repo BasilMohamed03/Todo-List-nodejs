@@ -135,7 +135,7 @@ Deploying the application to a K3s cluster using ArgoCD.
       * ArgoCD automatically synced the manifests and deployed the application.
 
       ![Deployment](Screenshots/ArgoCD UI.png)
-      
+
       ![Deployment2](Screenshots/Pod.png)
 ## Accessing the Application
 * **access the deployed To-Do List application:**
