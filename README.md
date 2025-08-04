@@ -111,6 +111,7 @@ Ansible was used to automate the setup of a local CentOS 9 VM.
   * Add the user to the docker group.
 
   * Install a lightweight Kubernetes distribution (K3s) and its required SELinux policy.
+
         ![Ansible](Screenshots/Ansible.png)
 
 ### Part 3 & 4: Kubernetes & ArgoCD Deployment
@@ -134,7 +135,8 @@ Deploying the application to a K3s cluster using ArgoCD.
       * ArgoCD automatically synced the manifests and deployed the application.
 
       ![Deployment](Screenshots/ArgoCD UI.png)
-      ![Deployment](Screenshots/Pod.png)
+      
+      ![Deployment2](Screenshots/Pod.png)
 ## Accessing the Application
 * **access the deployed To-Do List application:**
 
