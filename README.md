@@ -87,8 +87,8 @@ This section covers the containerization of the application and the setup of the
 ### Part 2: VM Configuration with Ansible
 Ansible was used to automate the setup of a local CentOS 9 VM.
 
-1. * **VM Creation**
- A local VM was created using VMware with the following specifications:
+1.  **VM Creation**
+   A local VM was created using VMware with the following specifications:
 
    **OS:** CentOS 9 Stream*
 
@@ -112,37 +112,33 @@ Ansible was used to automate the setup of a local CentOS 9 VM.
 ### Part 3 & 4: Kubernetes & ArgoCD Deployment
 Deploying the application to a K3s cluster using ArgoCD.
 
-1. Kubernetes Manifests
-  A k8s directory was created to hold the Kubernetes configuration files:
+1. **Kubernetes Manifests**
+     A k8s directory was created to hold the Kubernetes configuration files:
       * **secret.yml:** Manages the MongoDB connection string as a Kubernetes secret.
       * **deployment.yml:** Defines how to run the application, including health checks, resource requests, and the imagePullSecrets    needed to pull from a private registry.
       * **service.yml:** Exposes the application to the network using a NodePort.
 
-2. ArgoCD Installation
+2. **ArgoCD Installation**
       * The full, standard version of ArgoCD was installed on the K3s cluster.
       * The ArgoCD Image Updater was also installed to enable the automated deployment workflow.
       * ArgoCD Configuration
       * A Kubernetes secret (image-updater-secret) was created containing a GitHub PAT with repo scope. This allows the image updater to commit changes back to the Git repository.
       * The ArgoCD UI was exposed via a NodePort for easy access.
 
-3. Application Deployment
+3. **Application Deployment**
       * A new application was created in the ArgoCD UI, pointing to this Git repository.
-
       * ArgoCD automatically synced the manifests and deployed the application.
-
 ## Accessing the Application
-* **o access the deployed To-Do List application:**
+* **access the deployed To-Do List application:**
 
-* Find the application's port by running this command on the VM:
-
-* sudo k3s kubectl get svc todo-app-service -n default
-
-* Look for the NodePort number (e.g., 80:3xxxx/TCP).
-
-* Open your browser and navigate to: http://<YOUR_VM_IP>:<NODE_PORT>
-
+   * Find the application's port by running this command on the VM: 
+```bash
+     sudo k3s kubectl get svc todo-app-service -n default
+  ```               
+   * Look for the NodePort number (e.g., 80:3xxxx/TCP).
+   * Open your browser and navigate to: http://<YOUR_VM_IP>:<NODE_PORT>
 ## Troubleshooting Journey
-* **Several challenges were encountered and overcome during this assessment, demonstrating key debugging skills:**
+**Several challenges were encountered and overcome during this assessment, demonstrating key debugging skills:**
 
 * Cloud vs. Local: The initial choice of an AWS t2.micro instance was abandoned due to resource exhaustion, leading to a successful pivot to a more powerful local VM.
 
