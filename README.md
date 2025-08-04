@@ -53,6 +53,7 @@ The workflow follows a modern GitOps pipeline:
 * **ArgoCD Sync:** ArgoCD detects that the live state in the cluster no longer matches the desired state in the Git repository.
 
 * **Deployment:** ArgoCD automatically syncs the application, pulling the new image and rolling out the update to the Kubernetes cluster.
+
 ![Architecture Diagram](Screenshots/Diagram.png)
 
 ## Assumptions and Key Decisions
@@ -82,8 +83,9 @@ This section covers the containerization of the application and the setup of the
 * **Build and Push:** The workflow builds the Docker image and pushes it to GHCR with both a unique commit `SHA` tag and a `latest` tag.
 
 * **Required Secrets** The following secrets must be configured in the GitHub repository at `Settings` > `Secrets` and `variables` > `Actions`.
-
 * **GH_PAT:** A GitHub Personal Access Token with `write:` Packages scope to allow pushing images to GHCR.
+
+![Pipeline](Screenshots/pipeline.png)
 
 ### Part 2: VM Configuration with Ansible
 Ansible was used to automate the setup of a local CentOS 9 VM.
@@ -109,6 +111,7 @@ Ansible was used to automate the setup of a local CentOS 9 VM.
   * Add the user to the docker group.
 
   * Install a lightweight Kubernetes distribution (K3s) and its required SELinux policy.
+        ![Ansible](Screenshots/Ansible.png)
 
 ### Part 3 & 4: Kubernetes & ArgoCD Deployment
 Deploying the application to a K3s cluster using ArgoCD.
@@ -129,6 +132,9 @@ Deploying the application to a K3s cluster using ArgoCD.
 4. **Application Deployment**
       * A new application was created in the ArgoCD UI, pointing to this Git repository.
       * ArgoCD automatically synced the manifests and deployed the application.
+
+      ![Deployment](Screenshots/ArgoCD UI.png)
+      ![Deployment](Screenshots/Pod.png)
 ## Accessing the Application
 * **access the deployed To-Do List application:**
 
@@ -138,6 +144,8 @@ Deploying the application to a K3s cluster using ArgoCD.
   ```               
    * Look for the NodePort number (e.g., 80:3xxxx/TCP).
    * Open your browser and navigate to: http://<YOUR_VM_IP>:<NODE_PORT>
+
+     ![APP](Screenshots/APP.png)
 ## Troubleshooting Journey
 Several challenges were encountered and overcome during this assessment, demonstrating key debugging skills:
 
